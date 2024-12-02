@@ -28,7 +28,6 @@
         <module>mariadb</module>
         <module>oracle</module>
         <module>postgresql</module>
-        <module>redshift</module>
         <module>sqlite</module>
         <module>sqlserver</module>
         <module>trino</module>
