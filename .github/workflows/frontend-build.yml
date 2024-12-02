@@ -41,7 +41,7 @@ jobs:
           cache: yarn
           cache-dependency-path: webapp/yarn.lock
 
-      - name: restore node_modules
+      - name: Restore node_modules
         uses: actions/cache@v4
         with:
           path: "**/node_modules"
@@ -49,7 +49,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node_modules-
 
-      - name: restore typescript cache
+      - name: Restore TypeScript cache
         uses: actions/cache@v4
         with:
           path: "**/packages/*/dist"
@@ -57,7 +57,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-dist-
 
-      - name: yarn clean
+      - name: Yarn Clean
         if: env.skip_cache == 'true'
         run: yarn clear
 
@@ -68,9 +68,9 @@ jobs:
 
       - run: yarn test
 
-      # - name: Archive build artifacts
-      #   uses: actions/upload-artifact@v4
-      #   with:
-      #     name: frontend-build-artifacts
-      #     path: webapp/packages/product-default/lib
-      #     if-no-files-found: error
+      - name: Archive build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-build-artifacts
+          path: webapp/packages/product-default/lib
+          if-no-files-found: error

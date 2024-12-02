@@ -34,9 +34,9 @@ jobs:
         shell: bash
         working-directory: ./cloudbeaver/deploy
 
-      # - name: Archive build artifacts
-      #   uses: actions/upload-artifact@v4
-      #   with:
-      #     name: backend-build-artifacts
-      #     path: cloudbeaver/deploy/cloudbeaver
-      #     if-no-files-found: error
+      - name: Archive build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-build-artifacts
+          path: cloudbeaver/deploy/cloudbeaver
+          if-no-files-found: error
