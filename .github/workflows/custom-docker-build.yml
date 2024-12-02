@@ -5,7 +5,7 @@ on:
 
 jobs:
   build-backend:
-    name: Build
+    name: Backend Build
     timeout-minutes: 10
     runs-on: ubuntu-latest
 
@@ -41,7 +41,7 @@ jobs:
           if-no-files-found: error
 
   build-frontend:
-    name: Build
+    name: Frontend Build
     runs-on: ubuntu-latest
     needs: build-backend
     timeout-minutes: 10
@@ -101,7 +101,7 @@ jobs:
           if-no-files-found: error
 
   build-and-push-docker:
-    name: Build and Push Docker Image
+    name: Docker Image Build and Push
     runs-on: ubuntu-latest
     needs: [build-backend, build-frontend]
 
