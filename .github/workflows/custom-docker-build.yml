@@ -1,0 +1,70 @@
+name: Build and Push Docker Image
+
+on:
+  workflow_dispatch:
+
+jobs:
+  backend-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Build Backend
+        run: ./build-backend.sh
+        shell: bash
+        working-directory: ./cloudbeaver/deploy
+
+      - name: Archive Backend Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-build-artifacts
+          path: cloudbeaver/deploy/cloudbeaver
+
+  frontend-build:
+    runs-on: ubuntu-latest
+    needs: backend-build
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Build Frontend
+        run: ./build-frontend.sh
+        shell: bash
+        working-directory: ./webapp
+
+      - name: Archive Frontend Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-build-artifacts
+          path: webapp/dist
+
+  docker-build-and-push:
+    runs-on: ubuntu-latest
+    needs: [backend-build, frontend-build]
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Download Backend Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: backend-build-artifacts
+          path: deploy/cloudbeaver/
+
+      - name: Download Frontend Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: frontend-build-artifacts
+          path: deploy/cloudbeaver/web
+
+      - name: Build Docker Image
+        run: ./make-docker-container.sh
+        shell: bash
+        working-directory: ./deploy/docker
+
+      - name: Push Docker Image
+        run: docker push my-docker-repo/cloudbeaver:latest
