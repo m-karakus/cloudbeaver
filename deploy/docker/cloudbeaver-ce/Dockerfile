@@ -1,51 +1,52 @@
-# Stage 1: Base Setup with Java and CloudBeaver
-FROM eclipse-temurin:17-alpine as base
+FROM dbeaver/base-java as base
 
-# Set up Java environment
+MAINTAINER DBeaver Corp, devops@dbeaver.com
+
+ENV DBEAVER_GID=8978
+ENV DBEAVER_UID=8978
+
+RUN apt-get update && \
+    apt-get upgrade -y
+
+RUN groupadd -g $DBEAVER_GID dbeaver && \
+    useradd -g $DBEAVER_GID -M -u $DBEAVER_UID -s /bin/bash dbeaver
+
+COPY cloudbeaver /opt/cloudbeaver
+COPY scripts/launch-product.sh /opt/cloudbeaver/launch-product.sh
+
+RUN chown -R $DBEAVER_UID:$DBEAVER_GID /opt/cloudbeaver
+
+EXPOSE 8978
+RUN find /opt/cloudbeaver -type d -exec chmod 775 {} \;
+WORKDIR /opt/cloudbeaver/
+
+RUN chmod +x "run-server.sh" "/opt/cloudbeaver/launch-product.sh"
+
+# ENTRYPOINT ["./launch-product.sh"]
+
+
+FROM alpine:latest
+
+# Install bash and other dependencies
+RUN apk update && apk add bash
+
+# Set up Java
 ENV JAVA_HOME=/opt/java/openjdk
+COPY --from=eclipse-temurin:17-alpine $JAVA_HOME $JAVA_HOME
 ENV PATH="${JAVA_HOME}/bin:${PATH}"
 
 # Set up CloudBeaver
 ENV CLOUDBEAVER_HOME="/opt/cloudbeaver"
-
-# Copy CloudBeaver files
-COPY cloudbeaver $CLOUDBEAVER_HOME
-COPY scripts/launch-product.sh $CLOUDBEAVER_HOME/launch-product.sh
-
-# Ensure scripts are executable
-RUN chmod +x "$CLOUDBEAVER_HOME/run-server.sh" "$CLOUDBEAVER_HOME/launch-product.sh"
-
-# Stage 2: Lightweight Final Image
-FROM alpine:latest
-
-# Install dependencies
-RUN apk update && apk add --no-cache bash
-
-# Create user and group
-ENV DBEAVER_GID=8978
-ENV DBEAVER_UID=8978
-RUN addgroup -g $DBEAVER_GID dbeaver && \
-    adduser -D -H -u $DBEAVER_UID -G dbeaver -s /bin/bash dbeaver
-
-# Set up CloudBeaver directory
-ENV CLOUDBEAVER_HOME="/opt/cloudbeaver"
-
-# Copy from base image
 COPY --from=base $CLOUDBEAVER_HOME $CLOUDBEAVER_HOME
-COPY --from=base /opt/java/openjdk /opt/java/openjdk
 
-# Set permissions for CloudBeaver files
-RUN chown -R dbeaver:dbeaver $CLOUDBEAVER_HOME && \
-    find $CLOUDBEAVER_HOME -type d -exec chmod 775 {} \;
+# Ensure drivers directory exists and copy individual driver files
+WORKDIR $CLOUDBEAVER_HOME/drivers
 
-# Expose the server port
-EXPOSE 8978
-
-# Switch to non-root user
-USER dbeaver
-
-# Set working directory
+# Switch back to the main CloudBeaver directory
 WORKDIR $CLOUDBEAVER_HOME
 
+# Ensure scripts are executable
+RUN chmod +x run-server.sh
+
 # Entry point to start the server
-ENTRYPOINT ["./launch-product.sh"]
+ENTRYPOINT ["./run-server.sh"]
