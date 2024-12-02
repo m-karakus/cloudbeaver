@@ -9,7 +9,6 @@
         <resource name="drivers/mariadb"/>
         <resource name="drivers/oracle"/>
         <resource name="drivers/postgresql"/>
-        <resource name="drivers/redshift"/>
         <resource name="drivers/clickhouse"/>
         <resource name="drivers/clickhouse_com"/>
         <resource name="drivers/jaybird"/>
@@ -19,6 +18,7 @@
         <resource name="drivers/mssql/new"/>
         <resource name="drivers/trino"/>
         <resource name="drivers/kyuubi"/>
+        <resource name="drivers/redshift"/>
     </extension>
 
     <!-- Bundles  -->
@@ -30,7 +30,6 @@
         <bundle id="drivers.mariadb" label="MariaDB drivers"/>
         <bundle id="drivers.oracle" label="Oracle drivers"/>
         <bundle id="drivers.postgresql" label="PostgreSQL drivers"/>
-        <bundle id="drivers.redshift" label="Redshift drivers"/>
         <bundle id="drivers.clickhouse" label="Clickhouse (legacy) drivers"/>
         <bundle id="drivers.clickhouse_com" label="Clickhouse drivers"/>
         <bundle id="drivers.firebird" label="Firebird drivers"/>
@@ -40,6 +39,7 @@
         <bundle id="drivers.mssql.new" label="SQL Server drivers"/>
         <bundle id="drivers.trino" label="Trino drivers"/>
         <bundle id="drivers.kyuubi" label="Apache Kyuubi drivers"/>
+        <bundle id="drivers.redshift" label="Redshift drivers"/>
     </extension>
 
     <!-- Enabled drivers -->
@@ -50,7 +50,6 @@
         <driver id="mysql:mariaDB"/>
         <driver id="oracle:oracle_thin"/>
         <driver id="postgresql:postgres-jdbc"/>
-        <driver id="redshift:redshift_jdbc"/>
         <driver id="jaybird:jaybird"/>
         <driver id="clickhouse:yandex_clickhouse"/>
         <driver id="clickhouse:com_clickhouse"/>
@@ -62,6 +61,7 @@
         <driver id="generic:trino_jdbc"/>
         <driver id="generic:duckdb_jdbc"/>
         <driver id="generic:kyuubi_hive"/>
+        <driver id="redshift:redshift-jdbc42"/>
     </extension>
 
 
