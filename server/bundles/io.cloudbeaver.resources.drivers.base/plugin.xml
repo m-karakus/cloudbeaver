@@ -63,8 +63,8 @@
         <driver id="generic:trino_jdbc"/>
         <driver id="generic:duckdb_jdbc"/>
         <driver id="generic:kyuubi_hive"/>
-        <driver id="redshift:redshift-jdbc42"/>
-        <driver id="derby:derby"/>
+        <driver id="generic:redshift"/>
+        <driver id="generic:derby"/>
     </extension>
 
 
