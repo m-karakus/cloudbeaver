@@ -40,10 +40,10 @@ jobs:
           path: cloudbeaver/deploy/cloudbeaver
           if-no-files-found: error
 
-  frontend-build:
+  build-frontend:
     name: Build
     runs-on: ubuntu-latest
-    needs: backend-build
+    needs: build-build
     timeout-minutes: 10
     permissions:
       contents: read
@@ -103,7 +103,7 @@ jobs:
   build-and-push-docker:
     name: Build and Push Docker Image
     runs-on: ubuntu-latest
-    needs: [backend-build, frontend-build]
+    needs: [backend-build, build-frontend]
 
     steps:
       - name: Checkout Repository
