@@ -31,7 +31,7 @@
         <module>sqlite</module>
         <module>sqlserver</module>
         <module>trino</module>
-        <module>aws_redshift_42</module>
+        <module>redshift</module>
     </modules>
 
     <build>
