@@ -39,9 +39,6 @@ ENV PATH="${JAVA_HOME}/bin:${PATH}"
 ENV CLOUDBEAVER_HOME="/opt/cloudbeaver"
 COPY --from=base $CLOUDBEAVER_HOME $CLOUDBEAVER_HOME
 
-# Ensure drivers directory exists and copy individual driver files
-WORKDIR $CLOUDBEAVER_HOME/drivers
-
 # Switch back to the main CloudBeaver directory
 WORKDIR $CLOUDBEAVER_HOME
 

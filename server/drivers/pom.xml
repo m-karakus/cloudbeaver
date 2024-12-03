@@ -31,8 +31,7 @@
         <module>sqlite</module>
         <module>sqlserver</module>
         <module>trino</module>
-        <module>redshift</module>
-        <module>derby</module>
+        <module>new-driver-id</module>
     </modules>
 
     <build>
