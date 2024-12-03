@@ -61,7 +61,7 @@
         <driver id="generic:trino_jdbc"/>
         <driver id="generic:duckdb_jdbc"/>
         <driver id="generic:kyuubi_hive"/>
-        <driver id="generic.aws_redshift_42"/>
+        <driver id="postgresql:postgres-redshift-jdbc"/>
     </extension>
 
 
