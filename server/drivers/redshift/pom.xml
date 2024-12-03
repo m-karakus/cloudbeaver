@@ -9,7 +9,7 @@
         <relativePath>../</relativePath>
     </parent>
     <properties>
-        <deps.output.dir>postgresql/redshift-jdbc</deps.output.dir>
+        <deps.output.dir>redshift</deps.output.dir>
     </properties>
     <dependencies>
         <dependency>
