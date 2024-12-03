@@ -1,6 +1,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>drivers.new-driver-id</artifactId>
+    <artifactId>drivers.aws_redshift_42</artifactId>
     <version>1.0.0</version>
     <parent>
         <groupId>io.cloudbeaver</groupId>
@@ -9,7 +9,7 @@
         <relativePath>../</relativePath>
     </parent>
     <properties>
-        <deps.output.dir>new-driver-id</deps.output.dir>
+        <deps.output.dir>aws_redshift_42</deps.output.dir>
     </properties>
     <dependencies>
         <dependency>

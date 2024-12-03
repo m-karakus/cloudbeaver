@@ -31,7 +31,7 @@
         <module>sqlite</module>
         <module>sqlserver</module>
         <module>trino</module>
-        <module>new-driver-id</module>
+        <module>aws_redshift_42</module>
     </modules>
 
     <build>

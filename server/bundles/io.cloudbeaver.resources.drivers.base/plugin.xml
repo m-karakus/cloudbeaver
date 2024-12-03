@@ -18,7 +18,7 @@
         <resource name="drivers/mssql/new"/>
         <resource name="drivers/trino"/>
         <resource name="drivers/kyuubi"/>
-        <resource name="drivers/new-driver-id"/>
+        <resource name="drivers/aws_redshift_42"/>
     </extension>
 
     <!-- Bundles  -->
@@ -39,7 +39,7 @@
         <bundle id="drivers.mssql.new" label="SQL Server drivers"/>
         <bundle id="drivers.trino" label="Trino drivers"/>
         <bundle id="drivers.kyuubi" label="Apache Kyuubi drivers"/>
-        <bundle id="drivers.new-driver-id" label="New driver files"/>
+        <bundle id="drivers.aws_redshift_42" label="New driver files"/>
     </extension>
 
     <!-- Enabled drivers -->
@@ -61,7 +61,7 @@
         <driver id="generic:trino_jdbc"/>
         <driver id="generic:duckdb_jdbc"/>
         <driver id="generic:kyuubi_hive"/>
-        <driver id="generic.new-driver-id"/>
+        <driver id="generic.aws_redshift_42"/>
     </extension>
 
 
