@@ -1,28 +1,121 @@
 name: Build and Push Docker Image
 
 on:
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-  # Allows you to reuse workflows by referencing their YAML files
-  workflow_call:
-
 jobs:
-  build-and-push-docker:
-    name: Build and Push Docker Image
+  build-backend:
+    name: Backend Build
+    timeout-minutes: 10
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - uses: actions/checkout@v4
+        with:
+          path: cloudbeaver
+
+      - name: Clone Deps Repositories
+        uses: dbeaver/github-actions/clone-repositories@devel
+        with:
+          project_deps_path: "./cloudbeaver/project.deps"
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: "temurin"
+          java-version: "17"
+          cache: maven
+
+      - uses: dbeaver/github-actions/install-maven@devel
+
+      - name: Run build script
+        run: ./build-backend.sh
+        shell: bash
+        working-directory: ./cloudbeaver/deploy
+
+      - name: Archive build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-build-artifacts
+          path: cloudbeaver/deploy/cloudbeaver
+          if-no-files-found: error
+
+  build-frontend:
+    name: Frontend Build
+    runs-on: ubuntu-latest
+    needs: build-backend
+    timeout-minutes: 10
+    permissions:
+      contents: read
+
+    outputs:
+      build-status: ${{ steps.build.outcome }}
+      test-status: ${{ steps.test.outcome }}
+
+    defaults:
+      run:
+        working-directory: ./webapp
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - run: corepack enable
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: yarn
+          cache-dependency-path: webapp/yarn.lock
+
+      - name: Restore node_modules
+        uses: actions/cache@v4
+        with:
+          path: "**/node_modules"
+          key: ${{ runner.os }}-node_modules-${{ hashFiles('webapp/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-node_modules-
+
+      - name: Restore TypeScript cache
+        uses: actions/cache@v4
+        with:
+          path: "**/packages/*/dist"
+          key: ${{ runner.os }}-dist-${{ hashFiles('webapp/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-dist-
+
+      - name: Yarn Clean
+        if: env.skip_cache == 'true'
+        run: yarn clear
+
+      - run: yarn install --immutable
+
+      - run: yarn bundle
+        working-directory: ./webapp/packages/product-default
+
+      - run: yarn test
+
+      - name: Archive build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-build-artifacts
+          path: webapp/packages/product-default/lib
+          if-no-files-found: error
+
+  build-and-push-docker:
+    name: Docker Image Build and Push
+    runs-on: ubuntu-latest
+    needs: [build-backend, build-frontend]
+
+    steps:
+      - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Download backend artifacts
+      - name: Download Backend Artifacts
         uses: actions/download-artifact@v4
         with:
           name: backend-build-artifacts
           path: deploy/cloudbeaver/
 
-      - name: Download frontend artifacts
+      - name: Download Frontend Artifacts
         uses: actions/download-artifact@v4
         with:
           name: frontend-build-artifacts
@@ -31,7 +124,7 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Run custom Docker build script
+      - name: Run Custom Docker Build Script
         run: ./make-docker-container.sh
         shell: bash
         working-directory: ./deploy/docker
@@ -53,7 +146,7 @@ jobs:
       #     tar xzvf docker-credential-pass.tar.gz
       #     sudo mv docker-credential-pass /usr/local/bin/docker-credential-pass
       #     sudo chmod +x /usr/local/bin/docker-credential-pass
-  
+
       # - name: Configure Docker to use Credential Helper
       #   run: |
       #     mkdir -p ~/.docker

@@ -1,4 +1,4 @@
-FROM dbeaver/base-java
+FROM dbeaver/base-java as base
 
 MAINTAINER DBeaver Corp, devops@dbeaver.com
 
@@ -22,4 +22,28 @@ WORKDIR /opt/cloudbeaver/
 
 RUN chmod +x "run-server.sh" "/opt/cloudbeaver/launch-product.sh"
 
+# ENTRYPOINT ["./launch-product.sh"]
+
+
+FROM alpine:latest
+
+# Install bash and other dependencies
+RUN apk update && apk add bash
+
+# Set up Java
+ENV JAVA_HOME=/opt/java/openjdk
+COPY --from=eclipse-temurin:17-alpine $JAVA_HOME $JAVA_HOME
+ENV PATH="${JAVA_HOME}/bin:${PATH}"
+
+# Set up CloudBeaver
+ENV CLOUDBEAVER_HOME="/opt/cloudbeaver"
+COPY --from=base $CLOUDBEAVER_HOME $CLOUDBEAVER_HOME
+
+# Switch back to the main CloudBeaver directory
+WORKDIR $CLOUDBEAVER_HOME
+
+# Ensure scripts are executable
+RUN chmod +x run-server.sh
+
+# Entry point to start the server
 ENTRYPOINT ["./run-server.sh"]
