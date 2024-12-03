@@ -12,11 +12,11 @@
         <deps.output.dir>cassandra</deps.output.dir>
     </properties>
     <dependencies>
-        <!-- https://mvnrepository.com/artifact/org.apache.cassandra/java-driver-core -->
+        <!-- https://mvnrepository.com/artifact/org.apache.cassandra/cassandra-all -->
         <dependency>
             <groupId>org.apache.cassandra</groupId>
-            <artifactId>java-driver-core</artifactId>
-            <version>4.18.1</version>
+            <artifactId>cassandra-all</artifactId>
+            <version>4.1.7</version>
         </dependency>
     </dependencies>
 </project>
