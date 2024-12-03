@@ -1,10 +1,11 @@
 version: '3'
 services:
   cloudbeaver:
-    build: .
+    # build: .
+    image: ghcr.io/m-karakus/cloudbeaver:devel
     container_name: cloudbeaver
     ports:
-      - "8978:8978"
-    volumes:
-      - "./logs:/opt/cloudbeaver/logs"
-      - "./workspace:/opt/cloudbeaver/workspace"
+      - "8080:8978"
+    # volumes:
+    #   - "./logs:/opt/cloudbeaver/logs"
+    #   - "./workspace:/opt/cloudbeaver/workspace"

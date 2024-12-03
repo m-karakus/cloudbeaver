@@ -1,0 +1,22 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>drivers.cassandra</artifactId>
+    <version>1.0.0</version>
+    <parent>
+        <groupId>io.cloudbeaver</groupId>
+        <artifactId>drivers</artifactId>
+        <version>1.0.0</version>
+        <relativePath>../</relativePath>
+    </parent>
+    <properties>
+        <deps.output.dir>cassandra</deps.output.dir>
+    </properties>
+    <dependencies>
+        <!-- https://mvnrepository.com/artifact/org.apache.cassandra/java-driver-core -->
+        <dependency>
+            <groupId>org.apache.cassandra</groupId>
+            <artifactId>java-driver-core</artifactId>
+            <version>4.18.1</version>
+        </dependency>
+    </dependencies>
+</project>
