@@ -45,6 +45,7 @@
     </extension>
 
     <!-- Enabled drivers -->
+    <!-- https://github.com/dbeaver/dbeaver/blob/devel/plugins/org.jkiss.dbeaver.ext.generic/plugin.xml -->
     <extension point="io.cloudbeaver.driver">
         <driver id="db2:db2"/>
         <driver id="db2_i:db2_iseries"/>
